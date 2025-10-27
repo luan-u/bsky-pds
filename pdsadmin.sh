@@ -4,7 +4,7 @@ set -o nounset
 set -o pipefail
 
 #PDSADMIN_BASE_URL="https://raw.githubusercontent.com/bluesky-social/pds/main/pdsadmin"
-PDSADMIN_BASE_URL="https://raw.githubusercontent.com/luan-u/bsky-pds/refs/heads/caramelo/pdsadmin"
+PDSADMIN_BASE_URL="https://raw.githubusercontent.com/luan-u/bsky-pds/caramelo/pdsadmin"
 
 # Command to run.
 COMMAND="${1:-help}"
