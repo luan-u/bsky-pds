@@ -17,11 +17,11 @@ GENERATE_K256_PRIVATE_KEY_CMD="openssl ecparam --name secp256k1 --genkey --noout
 
 # The Docker compose file.
 #COMPOSE_URL="https://raw.githubusercontent.com/bluesky-social/pds/main/compose.yaml"
-COMPOSE_URL="https://raw.githubusercontent.com/luan-u/bsky-pds/refs/heads/caramelo/compose.yaml"
+COMPOSE_URL="https://raw.githubusercontent.com/luan-u/bsky-pds/caramelo/compose.yaml"
 
 # The pdsadmin script.
 #PDSADMIN_URL="https://raw.githubusercontent.com/bluesky-social/pds/main/pdsadmin.sh"
-PDSADMIN_URL="https://raw.githubusercontent.com/luan-u/bsky-pds/refs/heads/caramelo/pdsadmin.sh"
+PDSADMIN_URL="https://raw.githubusercontent.com/luan-u/bsky-pds/caramelo/pdsadmin.sh"
 
 # System dependencies.
 REQUIRED_SYSTEM_PACKAGES="
