@@ -1,4 +1,5 @@
-FROM node:20.19-alpine3.22 as build
+# NOTE there is an additional build stage below that should match
+FROM node:20.20-alpine3.23 as build
 
 RUN corepack enable
 
@@ -7,7 +8,7 @@ ENV CGO_ENABLED=0
 ENV GODEBUG="netdns=go"
 WORKDIR /tmp
 RUN apk add --no-cache git go
-RUN git clone https://github.com/bluesky-social/goat.git && cd goat && git checkout v0.1.2 && go build -o /tmp/goat-build .
+RUN git clone https://github.com/bluesky-social/goat.git && cd goat && git checkout v0.2.1 && go build -o /tmp/goat-build .
 
 # Move files into the image and install
 WORKDIR /app
@@ -16,7 +17,7 @@ RUN corepack prepare --activate
 RUN pnpm install --production --frozen-lockfile > /dev/null
 
 # Uses assets from build stage to reduce build size
-FROM node:20.19-alpine3.22
+FROM node:20.20-alpine3.23
 
 RUN apk add --update dumb-init
 
