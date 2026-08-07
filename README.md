@@ -33,6 +33,7 @@ Head over to the [ATProto Touchers Discord](https://discord.atprotocol.dev/) to 
     - [Logging](#logging)
     - [Updating your PDS](#updating-your-pds)
     - [Environment Variables](#environment-variables)
+    - [Customizing the appearance](#customizing-the-appearance)
     - [Migrating your PDS](#migrating-your-pds)
     - [Fixing a Relay desync](#fixing-a-relay-desync)
   - [License](#license)
@@ -348,10 +349,55 @@ sudo pdsadmin update
 | `PDS_EMAIL_SMTP_URL`                        | None                               |
 | `PDS_EMAIL_FROM_ADDRESS`                    | None                               |
 | `PDS_CONTACT_EMAIL_ADDRESS`                 | None                               |
-| `PDS_PRIVACY_POLICY_URL`                    | None                               |
-| `PDS_TERMS_OF_SERVICE_URL`                  | None                               |
 | `PDS_RATE_LIMITS_ENABLED`                   | `true`                             |
 | `PDS_INVITE_REQUIRED`                       | `true`                             |
+
+### Customizing the appearance
+
+Your PDS serves the sign-in, sign-up, authorization, and account-management screens. You can brand them with your service's name, logo, colors, and background by adding any of these to `pds.env`. **All are optional.** Unset colors fall back to the stock palette in the table below (a `#8338ec` primary), the service name defaults to `<hostname> PDS`, and the logo, footer links, and background simply don't appear.
+
+**Name, logo & footer links**
+
+| Environment Variable       | Description                                                 |
+| -------------------------- | ----------------------------------------------------------- |
+| `PDS_SERVICE_NAME`         | Name shown on the auth screens (defaults to `<hostname> PDS`). |
+| `PDS_LOGO_URL`             | URL of a logo image shown above the sign-in card.           |
+| `PDS_HOME_URL`             | "Home" footer link.                                         |
+| `PDS_PRIVACY_POLICY_URL`   | "Privacy Policy" footer link.                               |
+| `PDS_TERMS_OF_SERVICE_URL` | "Terms of Service" footer link.                             |
+| `PDS_SUPPORT_URL`          | "Support" footer link.                                      |
+
+**Colors.** Each accepts any CSS color, e.g. `#1083fe` or `rgb(16 131 254)`.
+
+| Environment Variable | Description                                 | Default   |
+| -------------------- | ------------------------------------------- | --------- |
+| `PDS_PRIMARY_COLOR`  | Accent for buttons and focus rings.         | `#8338ec` |
+| `PDS_ERROR_COLOR`    | Error states.                               | `#dc2626` |
+| `PDS_WARNING_COLOR`  | Warnings.                                   | `#ffab0f` |
+| `PDS_INFO_COLOR`     | Informational notices.                      | `#007aff` |
+| `PDS_SUCCESS_COLOR`  | Success states.                             | `#17cc88` |
+
+**Background images**
+
+| Environment Variable       | Description                                               |
+| -------------------------- | -------------------------------------------------------- |
+| `PDS_BACKGROUND_LIGHT_URL` | Image URL painted behind the auth card in **light** mode. |
+| `PDS_BACKGROUND_DARK_URL`  | Image URL painted behind the auth card in **dark** mode.  |
+
+The image fills the area behind the card (`cover`, centered) and is chosen by the visitor's light/dark preference. The card keeps its own opaque surface, so text stays legible over any image.
+
+**Tips:** Any common web image format works (WebP, AVIF, JPEG, PNG, SVG). Host it at a public **HTTPS** URL; like `PDS_LOGO_URL`, the auth pages only load images over `https:`. It loads on every sign-in and is scaled to fill the screen. Use a well-compressed image around 2000px wide and comfortably under 1 MB (a few hundred KB is ideal). Keep important detail away from the edges, since the image is cropped to fill.
+
+**Example**
+
+```bash
+# Appearance
+PDS_SERVICE_NAME="Alice's PDS"
+PDS_LOGO_URL="https://example.com/logo.png"
+PDS_PRIMARY_COLOR="#1083fe"
+PDS_BACKGROUND_LIGHT_URL="https://example.com/bg-light.jpg"
+PDS_BACKGROUND_DARK_URL="https://example.com/bg-dark.jpg"
+```
 
 ### Migrating your PDS
 
