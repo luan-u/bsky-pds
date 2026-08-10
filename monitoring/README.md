@@ -118,7 +118,7 @@ in the log records.
 
 ## Already running Prometheus and Grafana?
 
-In this case you don't need `compose.yaml` — only two things.
+In this case you don't need `compose.yaml`.
 
 **1. Point the PDS at your metrics backend.** Set the variables above in
 `/pds/pds.env`, with `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` pointed at your own
@@ -171,7 +171,7 @@ docker exec pds printenv NODE_OPTIONS
 
 Metric names come from the OpenTelemetry instrumentation and are translated by
 Prometheus's OTLP receiver (dots become underscores, and type and unit suffixes
-are appended — `account.created` becomes `account_created_total`). Names can
+are appended; `account.created` becomes `account_created_total`). Names can
 change as the instrumentation libraries are upgraded.
 
 To see what your PDS is actually reporting:
@@ -193,7 +193,7 @@ issue so the dashboard can be fixed.
 ## Going further: session events and traces
 
 If you want sign-ins and session refreshes, or traces, Prometheus alone isn't
-enough — it cannot receive either signal. You need something in front that can
+enough, as it cannot receive either signal. You need something in front that can
 route each signal to a different backend: an
 [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) (or Grafana
 Alloy). With one in place you can point the PDS at a single endpoint and let the
@@ -204,7 +204,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 ```
 
 The PDS deliberately does
-*not* ship its pino request logs over OTLP — it emits only the five 
+*not* ship its pino request logs over OTLP. It emits only the five 
 events above, through the Logs API. Those records use the OTLP `event_name`
 field (`account.signed-in`, `session.refreshed`, and so on) with the event detail
 in attributes, and they are trace-correlated when traces are also enabled.
