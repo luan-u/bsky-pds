@@ -1,14 +1,17 @@
-# NOTE there is an additional build stage below that should match
-FROM node:24.19-alpine3.23 AS build
+# Build goat with the toolchain required by its pinned release.
+FROM golang:1.27.3-alpine3.23 AS goat-build
 
-RUN corepack enable
-
-# Build goat binary
 ENV CGO_ENABLED=0
 ENV GODEBUG="netdns=go"
+ENV GOTOOLCHAIN=local
 WORKDIR /tmp
-RUN apk add --no-cache git go
-RUN git clone https://github.com/bluesky-social/goat.git && cd goat && git checkout v0.2.2 && go build -o /tmp/goat-build .
+RUN apk add --no-cache git
+RUN git clone https://github.com/bluesky-social/goat.git && cd goat && git checkout v0.2.7 && go build -o /tmp/goat-build .
+
+# NOTE there is an additional build stage below that should match
+FROM node:24.22.1-alpine3.23 AS build
+
+RUN corepack enable
 
 # Move files into the image and install
 WORKDIR /app
@@ -17,16 +20,19 @@ RUN corepack prepare --activate
 RUN pnpm install --production --frozen-lockfile > /dev/null
 
 # Uses assets from build stage to reduce build size
-FROM node:24.19-alpine3.23
+FROM node:24.22.1-alpine3.23
 
 RUN apk add --update dumb-init
+
+# Pick up CA bundle updates without waiting for an upstream node image rebuild
+RUN apk upgrade --no-cache ca-certificates-bundle
 
 # Avoid zombie processes, handle signal forwarding
 ENTRYPOINT ["dumb-init", "--"]
 
 WORKDIR /app
 COPY --from=build /app /app
-COPY --from=build /tmp/goat-build /usr/local/bin/goat
+COPY --from=goat-build /tmp/goat-build /usr/local/bin/goat
 
 EXPOSE 3000
 ENV PDS_PORT=3000

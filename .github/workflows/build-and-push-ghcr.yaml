@@ -2,7 +2,9 @@ name: build-and-push-ghcr
 on:
   pull_request:
     paths:
+      - .dockerignore
       - Dockerfile
+      - service/**
       - .github/workflows/build-and-push-ghcr.yaml
   push:
     branches:
